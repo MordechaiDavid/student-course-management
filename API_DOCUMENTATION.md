@@ -2,6 +2,7 @@
 
 ## Common Headers
 All API endpoints (except authentication) require:
+
 | Header Name | Required | Description |
 |------------|----------|-------------|
 | Session-Key | Yes | Authentication token obtained from login |
