@@ -23,7 +23,7 @@ public class AuthController {
 
     @PostMapping("/admin/login")
     public ResponseEntity<LoginResponse> adminLogin(@Valid @RequestBody AdminLoginRequest request) {
-        Session session = authService.authenticateAdmin(request.getEmail(), request.getPassword());
+        Session session = authService.authenticateAdminAndGenerateSessionKey(request.getEmail(), request.getPassword());
 
         return ResponseEntity.ok(LoginResponse.builder()
                 .sessionKey(session.getSessionKey())

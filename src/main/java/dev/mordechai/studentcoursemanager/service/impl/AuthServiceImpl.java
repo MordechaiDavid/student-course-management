@@ -9,6 +9,7 @@ import dev.mordechai.studentcoursemanager.exception.auth.SessionExpiredException
 import dev.mordechai.studentcoursemanager.repository.AdminRepository;
 import dev.mordechai.studentcoursemanager.repository.SessionRepository;
 import dev.mordechai.studentcoursemanager.service.AuthService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -18,33 +19,32 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Service
+@Slf4j
 public class AuthServiceImpl implements AuthService {
 
-    private final AdminRepository adminRepository;
-    private final SessionRepository sessionRepository;
+    private final AdminServiceImpl adminService;
+    private final SessionServiceImpl sessionService;
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
     public AuthServiceImpl(
-            AdminRepository adminRepository,
-            SessionRepository sessionRepository,
-            PasswordEncoder passwordEncoder)
-    {
-        this.adminRepository = adminRepository;
-        this.sessionRepository = sessionRepository;
+            AdminServiceImpl adminService,
+            SessionServiceImpl sessionService,
+            PasswordEncoder passwordEncoder) {
+        this.adminService = adminService;
+        this.sessionService = sessionService;
         this.passwordEncoder = passwordEncoder;
     }
 
     @Override
-    public Session authenticateAdmin(String email, String password) {
-        Admin admin = adminRepository.findByEmail(email)
+    public Session authenticateAdminAndGenerateSessionKey(String email, String password) {
+        Admin admin = adminService.getByEmail(email)
                 .orElseThrow(InvalidCredentialsException::new);
-
         if (!passwordEncoder.matches(password, admin.getHashPassword())) {
             throw new InvalidCredentialsException();
         }
-
-        return createSession(admin.getId(), "ADMIN");
+        log.info("Login Admin with id {}", admin.getId());
+        return sessionService.createSession(admin.getId(), UserType.ADMIN);
     }
 
     @Override
@@ -55,36 +55,11 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public void logout(String sessionKey) {
-        if (!sessionRepository.existsBySessionKey(sessionKey)) {
+        if (!sessionService.existBySessionKey(sessionKey)) {
             throw new InvalidSessionException();
         }
-        sessionRepository.deleteBySessionKey(sessionKey);
+        sessionService.deleteBySessionKey(sessionKey);
     }
 
-    @Override
-    @Transactional(readOnly = true)
-    public boolean validateSession(String sessionKey) {
-        return sessionRepository.findBySessionKey(sessionKey)
-                .map(session -> {
-                    if (session.getExpiresAt().isBefore(LocalDateTime.now())) {
-                        throw new SessionExpiredException();
-                    }
-                    return true;
-                })
-                .orElseThrow(InvalidSessionException::new);
-    }
 
-    private Session createSession(Long userId, String userType) {
-        String sessionKey = UUID.randomUUID().toString();
-        LocalDateTime expiresAt = LocalDateTime.now().plusHours(1);
-
-        Session session = new Session();
-        session.setSessionKey(sessionKey);
-        session.setUserId(userId);
-        session.setUserType(UserType.valueOf(userType));
-        session.setExpiresAt(expiresAt);
-        session.setCreatedAt(LocalDateTime.now());
-
-        return sessionRepository.save(session);
-    }
-} 
+}

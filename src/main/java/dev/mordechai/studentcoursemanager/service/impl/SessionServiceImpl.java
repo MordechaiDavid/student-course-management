@@ -10,20 +10,42 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class SessionServiceImpl implements SessionService {
 
-    private final SessionRepository sessionRepository;
+    private final SessionRepository repository;
 
     @Autowired
     public SessionServiceImpl(SessionRepository sessionRepository) {
-        this.sessionRepository = sessionRepository;
+        this.repository = sessionRepository;
+    }
+
+    @Override
+    public Session createSession(Long userId, UserType userType) {
+        String sessionKey = UUID.randomUUID().toString();
+        LocalDateTime expiresAt = LocalDateTime.now().plusHours(1);
+
+        Session session = new Session();
+        session.setSessionKey(sessionKey);
+        session.setUserId(userId);
+        session.setUserType(userType);
+        session.setExpiresAt(expiresAt);
+        session.setCreatedAt(LocalDateTime.now());
+
+        return repository.save(session);
+    }
+
+    @Override
+    public Optional<Session> getBySessionKey(String sessionKey) {
+        return repository.findBySessionKey(sessionKey);
     }
 
     @Override
     public Session validateSession(String sessionKey) {
-        Session session = sessionRepository.findBySessionKey(sessionKey)
+        Session session = repository.findBySessionKey(sessionKey)
                 .orElseThrow(InvalidSessionException::new);
 
         if (session.getExpiresAt().isBefore(LocalDateTime.now())) {
@@ -52,6 +74,15 @@ public class SessionServiceImpl implements SessionService {
     }
 
     @Override
+    public boolean existBySessionKey(String sessionKey) {
+        return repository.existsBySessionKey(sessionKey);
+    }
+
+    @Override
+    public void deleteBySessionKey(String sessionKey) {
+        repository.deleteBySessionKey(sessionKey);
+    }
+
     public boolean isAdmin(UserType userType) {
         return userType.equals(UserType.ADMIN);
     }

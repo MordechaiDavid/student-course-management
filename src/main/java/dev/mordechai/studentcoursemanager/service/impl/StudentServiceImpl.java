@@ -3,10 +3,13 @@ package dev.mordechai.studentcoursemanager.service.impl;
 import dev.mordechai.studentcoursemanager.dto.request.StudentCreateRequest;
 import dev.mordechai.studentcoursemanager.dto.request.StudentUpdateRequest;
 import dev.mordechai.studentcoursemanager.entity.Student;
+import dev.mordechai.studentcoursemanager.exception.student.StudentAlreadyExistsException;
 import dev.mordechai.studentcoursemanager.exception.student.StudentNotFoundException;
 import dev.mordechai.studentcoursemanager.repository.StudentRepository;
 import dev.mordechai.studentcoursemanager.service.StudentService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,61 +17,57 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
-@Transactional
+@Slf4j
 public class StudentServiceImpl implements StudentService {
 
-    private final StudentRepository studentRepository;
+    private final StudentRepository repository;
+    private final BCryptPasswordEncoder passwordEncoder;
 
     @Autowired
-    public StudentServiceImpl(StudentRepository studentRepository) {
-        this.studentRepository = studentRepository;
+    public StudentServiceImpl(StudentRepository studentRepository, BCryptPasswordEncoder passwordEncoder) {
+        this.repository = studentRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
-    public Student create(StudentCreateRequest request) {
-        Student student = new Student();
-        student.setName(request.getName());
-        student.setEmail(request.getEmail());
-        student.setSpecialKey(generateSpecialKey());
-        
-        return studentRepository.save(student);
+    public Student create(Student student) {
+        student.setSpecialKey(passwordEncoder.encode(student.getSpecialKey()));
+        if (repository.existsByEmail(student.getEmail())) {
+            throw new StudentAlreadyExistsException();
+        }
+        log.info("Creating student with email: {}", student.getEmail());
+        return repository.save(student);
     }
 
     @Override
-    @Transactional(readOnly = true)
-    public Optional<Student> findById(Long id) {
-        return studentRepository.findById(id);
+    public Student getById(Long id) {
+        Student student =  repository.findById(id)
+                .orElseThrow(() -> new StudentNotFoundException(id));
+        return student;
     }
 
     @Override
-    public Student update(Long id, StudentUpdateRequest request) {
-        Student student = studentRepository.findById(id)
+    public Student update(Long id, Student student) {
+        Student studentExist = repository.findById(id)
                 .orElseThrow(() -> new StudentNotFoundException(id));
 
-        student.setName(request.getName());
-        student.setEmail(request.getEmail());
-
-        return studentRepository.save(student);
+        student.setEmail(student.getEmail());
+        log.info("Updating email for student with id: {}", studentExist.getId());
+        return repository.save(student);
     }
 
     @Override
     public void delete(Long id) {
-        if (!studentRepository.existsById(id)) {
+        if (!repository.existsById(id)) {
             throw new StudentNotFoundException(id);
         }
-        studentRepository.deleteById(id);
+        log.info("Deleting student with id: {}", id);
+        repository.deleteById(id);
     }
 
     @Override
-    @Transactional(readOnly = true)
     public boolean existsByEmail(String email) {
-        return studentRepository.existsByEmail(email);
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public boolean existsById(Long id) {
-        return studentRepository.existsById(id);
+        return repository.existsByEmail(email);
     }
 
     private String generateSpecialKey() {

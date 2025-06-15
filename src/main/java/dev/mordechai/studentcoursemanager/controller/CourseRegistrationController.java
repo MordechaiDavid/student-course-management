@@ -9,15 +9,13 @@ import org.springframework.web.bind.annotation.*;
 public class CourseRegistrationController {
 
     @PostMapping
-    public ResponseEntity<?> register(@RequestBody CourseRegisterRequest request,
-                                      @RequestHeader("Session-Key") String sessionKey){
+    public ResponseEntity<?> register(@RequestBody CourseRegisterRequest request){
         // validate student
         return null;
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> cancelRegistration(@PathVariable Long id,
-                                                @RequestHeader("Session-Key") String sessionKey){
+    @DeleteMapping("/cancel/{id}")
+    public ResponseEntity<?> cancelRegistration(@PathVariable Long id){
         // validate student
         return null;
     }

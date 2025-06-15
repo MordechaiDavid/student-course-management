@@ -1,5 +1,7 @@
 package dev.mordechai.studentcoursemanager.entity;
 
+import dev.mordechai.studentcoursemanager.dto.request.StudentCreateRequest;
+import dev.mordechai.studentcoursemanager.dto.request.StudentUpdateRequest;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -28,5 +30,18 @@ public class Student {
 
     @Column(name = "special_key", nullable = false, unique = true, length = 255)
     private String specialKey;
+
+    public static Student fromDto(StudentCreateRequest dto){
+        return Student.builder()
+                .email(dto.getEmail())
+                .name(dto.getName())
+                .build();
+    }
+
+    public static Student fromDto(StudentUpdateRequest dto){
+        return Student.builder()
+                .email(dto.getEmail())
+                .build();
+    }
     
 } 

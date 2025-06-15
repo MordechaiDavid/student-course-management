@@ -7,10 +7,9 @@ import dev.mordechai.studentcoursemanager.entity.Student;
 import java.util.Optional;
 
 public interface StudentService {
-    Student create(StudentCreateRequest request);
-    Optional<Student> findById(Long id);
-    Student update(Long id, StudentUpdateRequest request);
+    Student create(Student student);
+    Student getById(Long id);
+    Student update(Long id, Student student);
     void delete(Long id);
     boolean existsByEmail(String email);
-    boolean existsById(Long id);
-} 
+}
