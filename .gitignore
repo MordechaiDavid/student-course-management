@@ -36,3 +36,6 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+# Spring Boot properties and YAML with sensitive info
+src/main/resources/application.yml
