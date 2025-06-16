@@ -31,29 +31,29 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public Student create(Student student) {
-        student.setSpecialKey(passwordEncoder.encode(student.getSpecialKey()));
         if (repository.existsByEmail(student.getEmail())) {
             throw new StudentAlreadyExistsException();
         }
+        String specialKey = generateSpecialKey();
+        student.setSpecialKey(specialKey);
+        //TODO encrypt the special key to db
         log.info("Creating student with email: {}", student.getEmail());
         return repository.save(student);
     }
 
     @Override
     public Student getById(Long id) {
-        Student student =  repository.findById(id)
+        return repository.findById(id)
                 .orElseThrow(() -> new StudentNotFoundException(id));
-        return student;
     }
 
     @Override
     public Student update(Long id, Student student) {
-        Student studentExist = repository.findById(id)
+        Student existStudent = repository.findById(id)
                 .orElseThrow(() -> new StudentNotFoundException(id));
-
-        student.setEmail(student.getEmail());
-        log.info("Updating email for student with id: {}", studentExist.getId());
-        return repository.save(student);
+        existStudent.setEmail(student.getEmail());
+        log.info("Updating email for student with id: {}", existStudent.getId());
+        return repository.save(existStudent);
     }
 
     @Override

@@ -1,12 +1,9 @@
 package dev.mordechai.studentcoursemanager.dto.request;
 
-
-import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Data
-public class CourseCreateRequest {
-    @NotBlank(message = "Course name is required")
+public class CourseUpdateRequest {
     private String name;
     private String description;
 }

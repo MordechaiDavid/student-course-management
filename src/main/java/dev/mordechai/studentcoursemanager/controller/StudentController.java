@@ -4,11 +4,9 @@ import dev.mordechai.studentcoursemanager.dto.request.StudentCreateRequest;
 import dev.mordechai.studentcoursemanager.dto.request.StudentUpdateRequest;
 import dev.mordechai.studentcoursemanager.dto.response.StudentResponse;
 import dev.mordechai.studentcoursemanager.entity.Student;
-import dev.mordechai.studentcoursemanager.service.StudentService;
 import dev.mordechai.studentcoursemanager.service.impl.StudentServiceImpl;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -23,24 +21,24 @@ public class StudentController {
     }
 
     @PostMapping
-    public ResponseEntity<StudentResponse> create(@Valid @RequestBody StudentCreateRequest request) {
+    public StudentResponse create(@Valid @RequestBody StudentCreateRequest request) {
         Student student = studentService.create(Student.fromDto(request));
-        return ResponseEntity.ok(StudentResponse.fromEntity(student));
+        return StudentResponse.fromEntity(student);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<StudentResponse> getById(@PathVariable Long id) {
-        return ResponseEntity.ok(StudentResponse.fromEntity(studentService.getById(id)));
+    public StudentResponse getById(@PathVariable("id") Long id) {
+        return StudentResponse.fromEntity(studentService.getById(id));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<StudentResponse> update(@PathVariable Long id, @Valid @RequestBody StudentUpdateRequest request) {
-        return ResponseEntity.ok(StudentResponse.fromEntity(studentService.update(id, Student.fromDto(request))));
+    public StudentResponse update(@PathVariable("id") Long id, @Valid @RequestBody StudentUpdateRequest request) {
+        return StudentResponse.fromEntity(studentService.update(id, Student.fromDto(request)));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> delete(@PathVariable Long id) {
+    public String delete(@PathVariable("id") Long id) {
         studentService.delete(id);
-        return ResponseEntity.ok("deleted");
+        return "deleted";
     }
 }
