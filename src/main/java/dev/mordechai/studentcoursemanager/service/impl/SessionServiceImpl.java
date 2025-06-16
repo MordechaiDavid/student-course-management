@@ -1,4 +1,4 @@
-package dev.mordechai.studentcoursemanager.service;
+package dev.mordechai.studentcoursemanager.service.impl;
 
 import dev.mordechai.studentcoursemanager.entity.Session;
 import dev.mordechai.studentcoursemanager.entity.UserType;
@@ -6,7 +6,7 @@ import dev.mordechai.studentcoursemanager.repository.SessionRepository;
 import org.springframework.stereotype.Service;
 
 @Service
-public class SessionService {
+public class SessionServiceImpl {
 
 
     private SessionRepository sessionRepository;

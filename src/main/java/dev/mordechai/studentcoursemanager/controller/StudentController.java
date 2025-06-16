@@ -1,6 +1,6 @@
 package dev.mordechai.studentcoursemanager.controller;
 
-import dev.mordechai.studentcoursemanager.service.SessionService;
+import dev.mordechai.studentcoursemanager.service.impl.SessionServiceImpl;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -9,10 +9,10 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/students")
 public class StudentController {
 
-    private final SessionService sessionService;
+    private final SessionServiceImpl sessionService;
     private final StudentService studentService;
 
-    public StudentController(SessionService sessionService, StudentService studentService) {
+    public StudentController(SessionServiceImpl sessionService, StudentService studentService) {
         this.sessionService = sessionService;
         this.studentService = studentService;
     }

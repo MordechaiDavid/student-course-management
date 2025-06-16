@@ -1,15 +1,15 @@
 package dev.mordechai.studentcoursemanager.controller;
 
-import dev.mordechai.studentcoursemanager.service.SessionService;
+import dev.mordechai.studentcoursemanager.service.impl.SessionServiceImpl;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/courses")
 public class CourseController {
-    private SessionService sessionService;
+    private SessionServiceImpl sessionService;
 
-    public CourseController(SessionService sessionService) {
+    public CourseController(SessionServiceImpl sessionService) {
         this.sessionService = sessionService;
     }
 
