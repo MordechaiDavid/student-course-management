@@ -1,15 +1,18 @@
 package dev.mordechai.studentcoursemanager.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
+@Table(name = "admins")
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 @Builder
-@Table(name = "users")
-public class User {
+@NoArgsConstructor
+@AllArgsConstructor
+public class Admin {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -21,12 +24,5 @@ public class User {
     private String email;
 
     @Column(length = 255)
-    private String password;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "user_type", nullable = false)
-    private UserType userType;
-
-    @Column(name = "special_key", unique = true, length = 255)
-    private String specialKey;
-}
+    private String hashPassword;
+} 

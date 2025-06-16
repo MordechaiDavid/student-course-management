@@ -7,6 +7,7 @@ All API endpoints (except authentication) require:
 |------------|----------|-------------|
 | Session-Key | Yes | Authentication token obtained from login |
 
+
 ## Authentication API
 Base URL: `/api/auth`
 
