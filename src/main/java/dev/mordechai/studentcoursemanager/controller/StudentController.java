@@ -1,5 +1,8 @@
 package dev.mordechai.studentcoursemanager.controller;
 
+import dev.mordechai.studentcoursemanager.dto.request.StudentCreateRequest;
+import dev.mordechai.studentcoursemanager.dto.request.StudentUpdateRequest;
+import dev.mordechai.studentcoursemanager.service.StudentService;
 import dev.mordechai.studentcoursemanager.service.impl.SessionServiceImpl;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;

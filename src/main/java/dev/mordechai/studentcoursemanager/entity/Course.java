@@ -1,4 +1,4 @@
-package dev.entity;
+package dev.mordechai.studentcoursemanager.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

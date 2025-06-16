@@ -1,5 +1,7 @@
 package dev.mordechai.studentcoursemanager.controller;
 
+import dev.mordechai.studentcoursemanager.dto.request.CoueseUpdateRequest;
+import dev.mordechai.studentcoursemanager.dto.request.CourseCreateRequest;
 import dev.mordechai.studentcoursemanager.service.impl.SessionServiceImpl;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

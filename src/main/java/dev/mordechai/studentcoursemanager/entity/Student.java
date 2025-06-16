@@ -1,4 +1,4 @@
-package dev.entity;
+package dev.mordechai.studentcoursemanager.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -26,7 +26,7 @@ public class Student {
     @Column(nullable = false, unique = true, length = 100)
     private String email;
 
-    @Column(nullable = false, unique = true, length = 255)
+    @Column(name = "special_key", nullable = false, unique = true, length = 255)
     private String specialKey;
     
 } 
