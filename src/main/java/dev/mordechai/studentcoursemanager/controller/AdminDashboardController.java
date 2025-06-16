@@ -1,5 +1,6 @@
 package dev.mordechai.studentcoursemanager.controller;
 
+import dev.mordechai.studentcoursemanager.service.SessionService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -9,6 +10,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/admin/dashboard")
 public class AdminDashboardController {
+
+    private final SessionService sessionService;
+
+    public AdminDashboardController(SessionService sessionService) {
+        this.sessionService = sessionService;
+    }
 
     @GetMapping("/students")
     public ResponseEntity<?> getAllStudentsWithCourses(@RequestHeader("Session-Key") String sessionKey) {

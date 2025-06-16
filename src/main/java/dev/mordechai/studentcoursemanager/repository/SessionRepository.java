@@ -12,4 +12,6 @@ public interface SessionRepository extends JpaRepository<Session, Long> {
     boolean existsBySessionKey(String sessionKey);
     Optional<Session> findBySessionKey(String sessionKey);
 
+    void deleteBySessionKey(String sessionKey);
+
 }
