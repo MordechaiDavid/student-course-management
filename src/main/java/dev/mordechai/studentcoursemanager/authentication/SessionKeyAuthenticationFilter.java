@@ -19,12 +19,12 @@ public class SessionKeyAuthenticationFilter extends OncePerRequestFilter {
 
     private final SessionService sessionService;
     private final List<String> adminEndpoints = Arrays.asList(
-            "/api/admin/",
-            "/api/students/",
-            "/api/courses"
+            "/api/students",
+            "/api/courses",
+            "/api/admin/dashboard"
     );
     private final List<String> studentEndpoints = Arrays.asList(
-            "/api/courses/registration/"
+            "/api/courses/registration"
     );
 
     public SessionKeyAuthenticationFilter(SessionService sessionService) {
@@ -37,6 +37,7 @@ public class SessionKeyAuthenticationFilter extends OncePerRequestFilter {
 
         String sessionKey = request.getHeader("Session-Key");
         String requestURI = request.getRequestURI();
+
 
         if (requestURI.startsWith("/api/auth/")) {
             filterChain.doFilter(request, response);
@@ -68,10 +69,10 @@ public class SessionKeyAuthenticationFilter extends OncePerRequestFilter {
     }
 
     private boolean isAdminEndpoint(String requestURI) {
-        return adminEndpoints.stream().anyMatch(requestURI::startsWith);
+        return adminEndpoints.stream().anyMatch(endpoint -> requestURI.startsWith(endpoint));
     }
 
     private boolean isStudentEndpoint(String requestURI) {
-        return studentEndpoints.stream().anyMatch(requestURI::startsWith);
+        return studentEndpoints.stream().anyMatch(endpoint -> requestURI.startsWith(endpoint));
     }
 } 

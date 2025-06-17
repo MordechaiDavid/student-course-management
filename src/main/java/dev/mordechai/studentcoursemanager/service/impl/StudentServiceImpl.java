@@ -1,7 +1,5 @@
 package dev.mordechai.studentcoursemanager.service.impl;
 
-import dev.mordechai.studentcoursemanager.dto.request.StudentCreateRequest;
-import dev.mordechai.studentcoursemanager.dto.request.StudentUpdateRequest;
 import dev.mordechai.studentcoursemanager.entity.Student;
 import dev.mordechai.studentcoursemanager.exception.student.StudentAlreadyExistsException;
 import dev.mordechai.studentcoursemanager.exception.student.StudentNotFoundException;
@@ -11,8 +9,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -48,6 +46,11 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
+    public List<Student> getAll() {
+        return repository.findAll();
+    }
+
+    @Override
     public Student update(Long id, Student student) {
         Student existStudent = repository.findById(id)
                 .orElseThrow(() -> new StudentNotFoundException(id));
@@ -72,5 +75,9 @@ public class StudentServiceImpl implements StudentService {
 
     private String generateSpecialKey() {
         return "STU-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
+    }
+
+    public Optional<Student> getBySpecialKey(String specialKey) {
+        return repository.findBySpecialKey(specialKey);
     }
 } 

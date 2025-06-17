@@ -1,23 +1,31 @@
 package dev.mordechai.studentcoursemanager.controller;
 
 import dev.mordechai.studentcoursemanager.dto.request.CourseRegisterRequest;
-import org.springframework.http.ResponseEntity;
+import dev.mordechai.studentcoursemanager.dto.request.CourseUnregisterRequest;
+import dev.mordechai.studentcoursemanager.dto.response.CourseRegisterResponse;
+import dev.mordechai.studentcoursemanager.entity.CourseRegistration;
+import dev.mordechai.studentcoursemanager.service.impl.CourseRegistrationServiceImpl;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/courses/registration")
 public class CourseRegistrationController {
 
-    @PostMapping
-    public ResponseEntity<?> register(@RequestBody CourseRegisterRequest request){
-        // validate student
-        return null;
+    CourseRegistrationServiceImpl service;
+
+    public CourseRegistrationController(CourseRegistrationServiceImpl service) {
+        this.service = service;
     }
 
-    @DeleteMapping("/cancel/{id}")
-    public ResponseEntity<?> cancelRegistration(@PathVariable Long id){
-        // validate student
-        return null;
+    @PostMapping
+    public CourseRegisterResponse register(@RequestBody CourseRegisterRequest request){
+        CourseRegistration courseRegistration = service.create(CourseRegistration.fromDto(request));
+        return CourseRegisterResponse.fromEntity(courseRegistration);
+    }
+
+    @DeleteMapping
+    public String cancelRegistration(@RequestBody CourseUnregisterRequest request){
+        return "unregister successfully";
     }
 
 

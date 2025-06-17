@@ -1,12 +1,10 @@
-package dev.mordechai.studentcoursemanager.dto.response;
+package dev.mordechai.studentcoursemanager.dto.student;
 
 import dev.mordechai.studentcoursemanager.entity.Student;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.Optional;
 
 @Data
 @Builder

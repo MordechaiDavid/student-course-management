@@ -1,5 +1,6 @@
 package dev.mordechai.studentcoursemanager.entity;
 
+import dev.mordechai.studentcoursemanager.dto.request.CourseRegisterRequest;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,4 +23,11 @@ public class CourseRegistration {
 
     @Column(name = "course_id", nullable = false)
     private Long courseId;
+
+    public static CourseRegistration fromDto(CourseRegisterRequest dto){
+        return CourseRegistration.builder()
+                .courseId(dto.getCourseId())
+                .studentId(dto.getStudentId())
+                .build();
+    }
 }

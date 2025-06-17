@@ -10,6 +10,8 @@ import dev.mordechai.studentcoursemanager.service.CourseService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @Slf4j
 public class CourseServiceImpl implements CourseService {
@@ -34,6 +36,11 @@ public class CourseServiceImpl implements CourseService {
     public Course getById(Long id) {
         return repository.findById(id)
                 .orElseThrow(CourseAlreadyExistsException::new);
+    }
+
+    @Override
+    public List<Course> getAll() {
+        return repository.findAll();
     }
 
     @Override

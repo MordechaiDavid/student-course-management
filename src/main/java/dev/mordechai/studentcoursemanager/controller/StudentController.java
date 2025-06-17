@@ -2,7 +2,7 @@ package dev.mordechai.studentcoursemanager.controller;
 
 import dev.mordechai.studentcoursemanager.dto.request.StudentCreateRequest;
 import dev.mordechai.studentcoursemanager.dto.request.StudentUpdateRequest;
-import dev.mordechai.studentcoursemanager.dto.response.StudentResponse;
+import dev.mordechai.studentcoursemanager.dto.student.StudentResponse;
 import dev.mordechai.studentcoursemanager.entity.Student;
 import dev.mordechai.studentcoursemanager.service.impl.StudentServiceImpl;
 import jakarta.validation.Valid;
