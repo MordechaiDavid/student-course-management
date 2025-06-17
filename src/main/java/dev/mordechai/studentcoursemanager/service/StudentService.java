@@ -1,5 +1,6 @@
 package dev.mordechai.studentcoursemanager.service;
 
+import dev.mordechai.studentcoursemanager.dto.flat.StudentCourseFlatDTO;
 import dev.mordechai.studentcoursemanager.entity.Student;
 
 import java.util.List;

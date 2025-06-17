@@ -1,5 +1,6 @@
 package dev.mordechai.studentcoursemanager.service.impl;
 
+import dev.mordechai.studentcoursemanager.dto.flat.StudentCourseFlatDTO;
 import dev.mordechai.studentcoursemanager.entity.Student;
 import dev.mordechai.studentcoursemanager.exception.student.StudentAlreadyExistsException;
 import dev.mordechai.studentcoursemanager.exception.student.StudentNotFoundException;

@@ -19,7 +19,6 @@ CREATE TABLE students
 );
 
 
-
 CREATE TABLE courses
 (
     id          BIGINT AUTO_INCREMENT PRIMARY KEY,
