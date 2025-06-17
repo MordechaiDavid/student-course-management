@@ -23,7 +23,9 @@ public class AuthController {
 
     @PostMapping("/admin/login")
     public ResponseEntity<LoginResponse> adminLogin(@Valid @RequestBody AdminLoginRequest request) {
-        Session session = authService.authenticateAdminAndGenerateSessionKey(request.getEmail(), request.getPassword());
+        System.out.println("AdminLoginRequest: " + request);
+        Session session = authService.
+                authenticateAdminAndGenerateSessionKey(request.getEmail(), request.getPassword());
 
         return ResponseEntity.ok(LoginResponse.builder()
                 .sessionKey(session.getSessionKey())
@@ -43,9 +45,8 @@ public class AuthController {
                 .build());
     }
 
-    @PostMapping("/logout")
-    public ResponseEntity<Void> logout(@RequestHeader("Session-Key") String sessionKey) {
-        authService.logout(sessionKey);
-        return ResponseEntity.ok().build();
-    }
+//    @PostMapping("/logout")
+//    public ResponseEntity<Void> logout() {
+//        return ResponseEntity.ok().build();
+//    }
 }
