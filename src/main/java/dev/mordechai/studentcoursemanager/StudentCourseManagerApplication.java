@@ -9,3 +9,5 @@ public class StudentCourseManagerApplication {
         SpringApplication.run(StudentCourseManagerApplication.class, args);
     }
 }
+
+// check config

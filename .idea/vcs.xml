@@ -2,5 +2,8 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/backend-healthcare-system" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/development-3nd-year/shai-class/client" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/development-3nd-year/shai-class/server" vcs="Git" />
   </component>
 </project>
