@@ -3,7 +3,6 @@ package dev.mordechai.studentcoursemanager.controller;
 import dev.mordechai.studentcoursemanager.dto.course.CourseWithStudentsDTO;
 import dev.mordechai.studentcoursemanager.dto.student.StudentWithCoursesDTO;
 import dev.mordechai.studentcoursemanager.service.StudentCourseQueryService;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,6 +26,6 @@ public class AdminDashboardController {
 
     @GetMapping("/courses")
     public List<CourseWithStudentsDTO> getAllCoursesWithStudents() {
-        return null;
+        return service.getAllCoursesWithStudents();
     }
 }
