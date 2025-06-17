@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.security.auth.login.CredentialException;
+
 
 @Service
 @Slf4j
@@ -36,7 +38,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public Session authenticateAdminAndGenerateSessionKey(String email, String password) {
         Admin admin = adminService.getByEmail(email)
-                .orElseThrow(InvalidCredentialsException::new);
+                .orElseThrow(()-> new InvalidCredentialsException());
         if (!passwordEncoder.matches(password, admin.getHashPassword())) {
             throw new InvalidCredentialsException();
         }

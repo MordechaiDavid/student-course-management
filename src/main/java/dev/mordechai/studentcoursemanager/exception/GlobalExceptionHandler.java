@@ -1,8 +1,10 @@
 package dev.mordechai.studentcoursemanager.exception;
 
 import dev.mordechai.studentcoursemanager.dto.response.ApiResponse;
+import dev.mordechai.studentcoursemanager.exception.auth.InvalidCredentialsException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -27,19 +29,19 @@ public class GlobalExceptionHandler {
      * @return a standardized error response with details about the validation failure
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ApiResponse<ApiErrorResponse>> handleValidationException(
+    public ResponseEntity<ApiResponse<ErrorResponse>> handleValidationException(
             MethodArgumentNotValidException ex, HttpServletRequest request) {
 
-        List<ApiErrorResponse.FieldError> fieldErrors = ex.getBindingResult()
+        List<ErrorResponse.FieldError> fieldErrors = ex.getBindingResult()
                 .getFieldErrors()
                 .stream()
-                .map(error -> ApiErrorResponse.FieldError.builder()
+                .map(error -> ErrorResponse.FieldError.builder()
                         .field(error.getField())
                         .message(error.getDefaultMessage())
                         .build())
                 .collect(Collectors.toList());
 
-        ApiErrorResponse response = ApiErrorResponse.builder()
+        ErrorResponse response = ErrorResponse.builder()
                 .httpStatus(HttpStatus.BAD_REQUEST.value())
                 .message("argument validation failed")
                 .errors(fieldErrors)
@@ -50,6 +52,27 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(new ApiResponse<>(response));
     }
 
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<ApiResponse<ErrorResponse>> handleHttpMessageNotReadableException(HttpServletRequest request) {
+
+        ErrorResponse response = ErrorResponse.builder()
+                .httpStatus(HttpStatus.BAD_REQUEST.value())
+                .message("Request body is missing or malformed")
+                .timestamp(LocalDateTime.now())
+                .path(request.getRequestURI())
+                .build();
+
+        return ResponseEntity.badRequest().body(new ApiResponse<>(response));
+    }
+
+    @ExceptionHandler(InvalidCredentialsException.class)
+    public ResponseEntity<ApiResponse<ErrorResponse>> handleInvalidCredentialsException(
+            InvalidCredentialsException ex, HttpServletRequest request) {
+        ErrorResponse response = new InvalidCredentialsException();
+        response.setPath(request.getRequestURI());
+        return ResponseEntity.badRequest().body(new ApiResponse<>(response));
+    }
+
     /**
      * Handles all uncaught exceptions.
      *
@@ -57,20 +80,18 @@ public class GlobalExceptionHandler {
      * @param request the HTTP request
      * @return a standardized error response for unexpected errors
      */
-//    @ExceptionHandler(Exception.class)
-//    public ResponseEntity<ApiResponse<?>> handleGeneralException(Exception ex, HttpServletRequest request) {
-//        ex.printStackTrace(); // Consider using a logger in production
-//
-//        ApiErrorResponse errorResponse = buildErrorResponse(
-//                HttpStatus.INTERNAL_SERVER_ERROR,
-//                "INTERNAL_ERROR",
-//                "Something went wrong",
-//                request.getRequestURI(),
-//                null
-//        );
-//
-//        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse<>(errorResponse));
-//    }
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ApiResponse<ErrorResponse>> handleGeneralException(Exception ex, HttpServletRequest request) {
+
+        ErrorResponse response = ErrorResponse.builder()
+                .httpStatus(HttpStatus.INTERNAL_SERVER_ERROR.value())
+                .message("Some Error in server")
+                .timestamp(LocalDateTime.now())
+                .path(request.getRequestURI())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse<>(response));
+    }
 
 
 }

@@ -1,10 +1,13 @@
 package dev.mordechai.studentcoursemanager.exception.auth;
 
-import dev.mordechai.studentcoursemanager.exception.base.BaseException;
+import dev.mordechai.studentcoursemanager.exception.ErrorResponse;
 import org.springframework.http.HttpStatus;
 
-public class InvalidCredentialsException extends BaseException {
+import java.time.LocalDateTime;
+
+public class InvalidCredentialsException extends ErrorResponse {
     public InvalidCredentialsException() {
-        super(HttpStatus.UNAUTHORIZED, "AUTH_002", "Invalid email or password");
+        super(LocalDateTime.now(), HttpStatus.UNAUTHORIZED.value(),
+                "Invalid email or password", null, null );
     }
 } 
