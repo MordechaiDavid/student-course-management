@@ -1,13 +1,12 @@
-package dev.mordechai.studentcoursemanager.dto.response;
+package dev.mordechai.studentcoursemanager.response;
 
-import dev.mordechai.studentcoursemanager.exception.ErrorResponse;
 import lombok.Data;
 
 @Data
 public class ApiResponse<T> {
     private boolean success;
     private T data;
-    private ErrorResponse error;
+    public ErrorResponse error;
 
     public ApiResponse(T data) {
         this.success = true;

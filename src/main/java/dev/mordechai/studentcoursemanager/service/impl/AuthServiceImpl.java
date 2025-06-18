@@ -5,14 +5,11 @@ import dev.mordechai.studentcoursemanager.entity.Session;
 import dev.mordechai.studentcoursemanager.entity.Student;
 import dev.mordechai.studentcoursemanager.entity.UserType;
 import dev.mordechai.studentcoursemanager.exception.auth.InvalidCredentialsException;
-import dev.mordechai.studentcoursemanager.exception.auth.InvalidSessionException;
 import dev.mordechai.studentcoursemanager.service.AuthService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import javax.security.auth.login.CredentialException;
 
 
 @Service
@@ -47,9 +44,9 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public Session authenticateStudent(String specialKey) {
+    public Session authenticateStudentAndGenerateSessionKey(String specialKey) {
         Student student = studentService.getBySpecialKey(specialKey)
-                .orElseThrow(InvalidCredentialsException::new);
+                .orElseThrow(RuntimeException::new);
         log.info("Login Student with email {}", student.getEmail());
         return sessionService.createSession(student.getId(), UserType.STUDENT);
     }
@@ -57,7 +54,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public void logout(String sessionKey) {
         if (!sessionService.existBySessionKey(sessionKey)) {
-            throw new InvalidSessionException();
+            throw new RuntimeException();
         }
         sessionService.deleteBySessionKey(sessionKey);
     }

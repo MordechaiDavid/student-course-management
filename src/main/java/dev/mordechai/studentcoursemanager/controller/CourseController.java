@@ -1,7 +1,7 @@
 package dev.mordechai.studentcoursemanager.controller;
 
-import dev.mordechai.studentcoursemanager.dto.request.CourseCreateRequest;
-import dev.mordechai.studentcoursemanager.dto.request.CourseUpdateRequest;
+import dev.mordechai.studentcoursemanager.dto.request.course.CourseCreateRequest;
+import dev.mordechai.studentcoursemanager.dto.request.course.CourseUpdateRequest;
 import dev.mordechai.studentcoursemanager.dto.response.CourseResponse;
 import dev.mordechai.studentcoursemanager.entity.Course;
 import dev.mordechai.studentcoursemanager.service.impl.CourseServiceImpl;

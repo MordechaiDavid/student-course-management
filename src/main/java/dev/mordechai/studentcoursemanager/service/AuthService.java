@@ -4,6 +4,6 @@ import dev.mordechai.studentcoursemanager.entity.Session;
 
 public interface AuthService {
     Session authenticateAdminAndGenerateSessionKey(String email, String password);
-    Session authenticateStudent(String specialKey);
+    Session authenticateStudentAndGenerateSessionKey(String specialKey);
     void logout(String sessionKey);
 }

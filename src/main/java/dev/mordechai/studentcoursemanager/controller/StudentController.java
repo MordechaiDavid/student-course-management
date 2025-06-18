@@ -1,10 +1,10 @@
 package dev.mordechai.studentcoursemanager.controller;
 
-import dev.mordechai.studentcoursemanager.dto.request.StudentCreateRequest;
+import dev.mordechai.studentcoursemanager.dto.request.course.StudentCreateRequest;
 import dev.mordechai.studentcoursemanager.dto.request.StudentUpdateRequest;
 import dev.mordechai.studentcoursemanager.dto.student.StudentResponse;
 import dev.mordechai.studentcoursemanager.entity.Student;
-import dev.mordechai.studentcoursemanager.service.impl.StudentServiceImpl;
+import dev.mordechai.studentcoursemanager.service.StudentService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -13,12 +13,14 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/students")
 public class StudentController {
 
-    private final StudentServiceImpl studentService;
+    private final StudentService studentService;
 
     @Autowired
-    public StudentController(StudentServiceImpl studentService) {
+    public StudentController(StudentService studentService) {
         this.studentService = studentService;
     }
+
+    // לבדוק אם צריך את המימוש של הממשק
 
     @PostMapping
     public StudentResponse create(@Valid @RequestBody StudentCreateRequest request) {

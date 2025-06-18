@@ -1,16 +1,12 @@
 package dev.mordechai.studentcoursemanager.entity;
 
-import dev.mordechai.studentcoursemanager.dto.request.CourseCreateRequest;
-import dev.mordechai.studentcoursemanager.dto.request.CourseUpdateRequest;
+import dev.mordechai.studentcoursemanager.dto.request.course.CourseCreateRequest;
+import dev.mordechai.studentcoursemanager.dto.request.course.CourseUpdateRequest;
 import jakarta.persistence.*;
-import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
 @Table(name = "courses")

@@ -1,9 +1,6 @@
 package dev.mordechai.studentcoursemanager.service.impl;
 
-import dev.mordechai.studentcoursemanager.dto.flat.StudentCourseFlatDTO;
 import dev.mordechai.studentcoursemanager.entity.Student;
-import dev.mordechai.studentcoursemanager.exception.student.StudentAlreadyExistsException;
-import dev.mordechai.studentcoursemanager.exception.student.StudentNotFoundException;
 import dev.mordechai.studentcoursemanager.repository.StudentRepository;
 import dev.mordechai.studentcoursemanager.service.StudentService;
 import lombok.extern.slf4j.Slf4j;
@@ -31,7 +28,7 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public Student create(Student student) {
         if (repository.existsByEmail(student.getEmail())) {
-            throw new StudentAlreadyExistsException();
+            throw new RuntimeException();
         }
         String specialKey = generateSpecialKey();
         student.setSpecialKey(specialKey);
@@ -43,7 +40,7 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public Student getById(Long id) {
         return repository.findById(id)
-                .orElseThrow(() -> new StudentNotFoundException(id));
+                .orElseThrow(() -> new RuntimeException());
     }
 
     @Override
@@ -54,7 +51,7 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public Student update(Long id, Student student) {
         Student existStudent = repository.findById(id)
-                .orElseThrow(() -> new StudentNotFoundException(id));
+                .orElseThrow(() -> new RuntimeException());
         existStudent.setEmail(student.getEmail());
         log.info("Updating email for student with id: {}", existStudent.getId());
         return repository.save(existStudent);
@@ -63,7 +60,7 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public void delete(Long id) {
         if (!repository.existsById(id)) {
-            throw new StudentNotFoundException(id);
+            throw new RuntimeException();
         }
         log.info("Deleting student with id: {}", id);
         repository.deleteById(id);

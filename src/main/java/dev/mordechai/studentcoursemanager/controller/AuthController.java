@@ -1,12 +1,14 @@
 package dev.mordechai.studentcoursemanager.controller;
 
-import dev.mordechai.studentcoursemanager.dto.request.AdminLoginRequest;
+import dev.mordechai.studentcoursemanager.dto.request.admin.AdminLoginRequest;
 import dev.mordechai.studentcoursemanager.dto.request.StudentLoginRequest;
 import dev.mordechai.studentcoursemanager.dto.response.LoginResponse;
 import dev.mordechai.studentcoursemanager.entity.Session;
+import dev.mordechai.studentcoursemanager.response.ApiResponse;
 import dev.mordechai.studentcoursemanager.service.AuthService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,27 +24,19 @@ public class AuthController {
     }
 
     @PostMapping("/admin/login")
-    public ResponseEntity<LoginResponse> adminLogin(@Valid @RequestBody AdminLoginRequest request) {
-        System.out.println("AdminLoginRequest: " + request);
+    public ResponseEntity<ApiResponse<LoginResponse>> adminLogin(@Valid @RequestBody AdminLoginRequest request) {
         Session session = authService.
                 authenticateAdminAndGenerateSessionKey(request.getEmail(), request.getPassword());
-
-        return ResponseEntity.ok(LoginResponse.builder()
-                .sessionKey(session.getSessionKey())
-                .userType(session.getUserType().name())
-                .userId(session.getUserId())
-                .build());
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new ApiResponse<>(LoginResponse.fromEntity(session)));
     }
 
     @PostMapping("/student/login")
-    public ResponseEntity<LoginResponse> studentLogin(@Valid @RequestBody StudentLoginRequest request) {
-        Session session = authService.authenticateStudent(request.getSpecialKey());
+    public ResponseEntity<ApiResponse<LoginResponse>> studentLogin(@Valid @RequestBody StudentLoginRequest request) {
+        Session session = authService.authenticateStudentAndGenerateSessionKey(request.getSpecialKey());
 
-        return ResponseEntity.ok(LoginResponse.builder()
-                .sessionKey(session.getSessionKey())
-                .userType(session.getUserType().name())
-                .userId(session.getUserId())
-                .build());
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new ApiResponse<>(LoginResponse.fromEntity(session)));
     }
 
 //    @PostMapping("/logout")

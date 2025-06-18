@@ -2,11 +2,13 @@ package dev.mordechai.studentcoursemanager.service.impl;
 
 import dev.mordechai.studentcoursemanager.entity.Session;
 import dev.mordechai.studentcoursemanager.entity.UserType;
-import dev.mordechai.studentcoursemanager.exception.auth.InvalidSessionException;
-import dev.mordechai.studentcoursemanager.exception.auth.SessionExpiredException;
+import dev.mordechai.studentcoursemanager.exception.session.InvalidSessionKeyException;
+import dev.mordechai.studentcoursemanager.exception.session.SessionKeyExpiredException;
+import dev.mordechai.studentcoursemanager.exception.session.UnappropriatedSessionKeyException;
 import dev.mordechai.studentcoursemanager.repository.SessionRepository;
 import dev.mordechai.studentcoursemanager.service.SessionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -46,31 +48,29 @@ public class SessionServiceImpl implements SessionService {
     @Override
     public Session validateSession(String sessionKey) {
         Session session = repository.findBySessionKey(sessionKey)
-                .orElseThrow(InvalidSessionException::new);
+                .orElseThrow(()-> new InvalidSessionKeyException());
 
         if (session.getExpiresAt().isBefore(LocalDateTime.now())) {
-            throw new SessionExpiredException();
+            throw new SessionKeyExpiredException();
         }
 
         return session;
     }
 
     @Override
-    public Session validateAdminSession(String sessionKey) {
+    public void validateAdminSession(String sessionKey) {
         Session session = validateSession(sessionKey);
         if (!isAdmin(session.getUserType())) {
-            throw new InvalidSessionException();
+            throw new UnappropriatedSessionKeyException();
         }
-        return session;
     }
 
     @Override
-    public Session validateStudentSession(String sessionKey) {
+    public void validateStudentSession(String sessionKey) {
         Session session = validateSession(sessionKey);
         if (isAdmin(session.getUserType())) {
-            throw new InvalidSessionException();
+            throw new UnappropriatedSessionKeyException();
         }
-        return session;
     }
 
     @Override

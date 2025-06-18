@@ -1,10 +1,6 @@
 package dev.mordechai.studentcoursemanager.service.impl;
 
 import dev.mordechai.studentcoursemanager.entity.Course;
-import dev.mordechai.studentcoursemanager.entity.Student;
-import dev.mordechai.studentcoursemanager.exception.course.CourseAlreadyExistsException;
-import dev.mordechai.studentcoursemanager.exception.course.CourseNotFoundException;
-import dev.mordechai.studentcoursemanager.exception.student.StudentNotFoundException;
 import dev.mordechai.studentcoursemanager.repository.CourseRepository;
 import dev.mordechai.studentcoursemanager.service.CourseService;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +22,7 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public Course create(Course course) {
         if (repository.existsByName(course.getName())) {
-            throw new CourseAlreadyExistsException();
+            throw new RuntimeException();
         }
         log.info("Creating course with name {}", course.getName());
         return repository.save(course);
@@ -35,7 +31,7 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public Course getById(Long id) {
         return repository.findById(id)
-                .orElseThrow(CourseAlreadyExistsException::new);
+                .orElseThrow(RuntimeException::new);
     }
 
     @Override
@@ -46,7 +42,7 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public Course update(Long id, Course course) {
         Course existCourse = repository.findById(id)
-                .orElseThrow(() -> new CourseNotFoundException(id));
+                .orElseThrow(() -> new RuntimeException());
         existCourse.setDescription(course.getDescription());
         existCourse.setName(course.getName());
         log.info("Updating course id: {}", course.getId());
@@ -56,7 +52,7 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public void delete(Long id) {
         if (!repository.existsById(id)) {
-            throw new CourseNotFoundException(id);
+            throw new RuntimeException();
         }
         log.info("Deleting course with id: {}", id);
         repository.deleteById(id);

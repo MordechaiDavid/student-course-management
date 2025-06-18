@@ -1,6 +1,6 @@
 package dev.mordechai.studentcoursemanager.config;
 
-import dev.mordechai.studentcoursemanager.authentication.SessionKeyAuthenticationFilter;
+import dev.mordechai.studentcoursemanager.filter.SessionKeyAuthFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -12,12 +12,13 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 public class SecurityConfig {
 
-    private final SessionKeyAuthenticationFilter sessionKeyAuthenticationFilter;
+    private final SessionKeyAuthFilter sessionKeyAuthenticationFilter;
 
-    public SecurityConfig(SessionKeyAuthenticationFilter sessionKeyAuthenticationFilter) {
+    public SecurityConfig(SessionKeyAuthFilter sessionKeyAuthenticationFilter) {
         this.sessionKeyAuthenticationFilter = sessionKeyAuthenticationFilter;
     }
 
+    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http

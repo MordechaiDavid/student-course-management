@@ -12,9 +12,9 @@ public interface SessionService {
 
     Session validateSession(String sessionKey);
 
-    Session validateAdminSession(String sessionKey);
+    void validateAdminSession(String sessionKey);
 
-    Session validateStudentSession(String sessionKey);
+    void validateStudentSession(String sessionKey);
 
     boolean existBySessionKey(String sessionKey);
 

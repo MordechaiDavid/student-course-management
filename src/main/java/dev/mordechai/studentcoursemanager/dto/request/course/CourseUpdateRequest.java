@@ -1,4 +1,4 @@
-package dev.mordechai.studentcoursemanager.dto.request;
+package dev.mordechai.studentcoursemanager.dto.request.course;
 
 import lombok.Data;
 

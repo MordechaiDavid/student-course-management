@@ -1,4 +1,4 @@
-package dev.mordechai.studentcoursemanager.dto.request;
+package dev.mordechai.studentcoursemanager.dto.request.admin;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
