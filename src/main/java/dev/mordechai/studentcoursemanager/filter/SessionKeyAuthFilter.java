@@ -60,11 +60,13 @@ public class SessionKeyAuthFilter extends OncePerRequestFilter {
 
             if (isStudentEndpoint(requestURI)) {
                 sessionService.validateStudentSession(sessionKey);
+                filterChain.doFilter(request, response);
                 return;
             }
 
             if (isAdminEndpoint(requestURI)) {
                 sessionService.validateAdminSession(sessionKey);
+                filterChain.doFilter(request, response);
                 return;
             }
 

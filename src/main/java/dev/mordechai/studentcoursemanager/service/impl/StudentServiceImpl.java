@@ -1,6 +1,8 @@
 package dev.mordechai.studentcoursemanager.service.impl;
 
 import dev.mordechai.studentcoursemanager.entity.Student;
+import dev.mordechai.studentcoursemanager.exception.entity.EntityAlreadyExistException;
+import dev.mordechai.studentcoursemanager.exception.entity.EntityNotFoundException;
 import dev.mordechai.studentcoursemanager.repository.StudentRepository;
 import dev.mordechai.studentcoursemanager.service.StudentService;
 import lombok.extern.slf4j.Slf4j;
@@ -20,15 +22,15 @@ public class StudentServiceImpl implements StudentService {
     private final BCryptPasswordEncoder passwordEncoder;
 
     @Autowired
-    public StudentServiceImpl(StudentRepository studentRepository, BCryptPasswordEncoder passwordEncoder) {
-        this.repository = studentRepository;
+    public StudentServiceImpl(StudentRepository repository, BCryptPasswordEncoder passwordEncoder) {
+        this.repository = repository;
         this.passwordEncoder = passwordEncoder;
     }
 
     @Override
     public Student create(Student student) {
         if (repository.existsByEmail(student.getEmail())) {
-            throw new RuntimeException();
+            throw new EntityAlreadyExistException("Student with this email already exist");
         }
         String specialKey = generateSpecialKey();
         student.setSpecialKey(specialKey);
@@ -40,7 +42,13 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public Student getById(Long id) {
         return repository.findById(id)
-                .orElseThrow(() -> new RuntimeException());
+                .orElseThrow(() -> new EntityNotFoundException("Student with this ID not found"));
+    }
+
+    @Override
+    public Student getByEmail(String email) {
+        return repository.findByEmail(email)
+                .orElseThrow(() -> new EntityNotFoundException("Student with this email not found"));
     }
 
     @Override
@@ -51,7 +59,7 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public Student update(Long id, Student student) {
         Student existStudent = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException());
+                .orElseThrow(() -> new EntityNotFoundException("Student with this id not found"));
         existStudent.setEmail(student.getEmail());
         log.info("Updating email for student with id: {}", existStudent.getId());
         return repository.save(existStudent);
@@ -72,7 +80,7 @@ public class StudentServiceImpl implements StudentService {
     }
 
     private String generateSpecialKey() {
-        return "STU-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
+        return UUID.randomUUID().toString();
     }
 
     public Optional<Student> getBySpecialKey(String specialKey) {
