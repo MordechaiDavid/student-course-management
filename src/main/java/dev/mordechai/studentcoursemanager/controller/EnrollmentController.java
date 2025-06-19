@@ -1,11 +1,11 @@
 package dev.mordechai.studentcoursemanager.controller;
 
-import dev.mordechai.studentcoursemanager.dto.request.CourseRegisterRequest;
-import dev.mordechai.studentcoursemanager.dto.request.CourseUnregisterRequest;
-import dev.mordechai.studentcoursemanager.dto.response.CourseRegisterResponse;
-import dev.mordechai.studentcoursemanager.entity.CourseRegistration;
+import dev.mordechai.studentcoursemanager.dto.request.enrollment.EnrollmentRequest;
+import dev.mordechai.studentcoursemanager.dto.request.enrollment.UnenrollmentRequest;
+import dev.mordechai.studentcoursemanager.dto.response.EnrollmentResponse;
+import dev.mordechai.studentcoursemanager.entity.Enrollment;
 import dev.mordechai.studentcoursemanager.response.ApiResponse;
-import dev.mordechai.studentcoursemanager.service.CourseRegistrationService;
+import dev.mordechai.studentcoursemanager.service.EnrollmentService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,26 +14,26 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/student/courses")
-public class CourseRegistrationController {
+public class EnrollmentController {
 
-    private final CourseRegistrationService service;
+    private final EnrollmentService service;
 
     @Autowired
-    public CourseRegistrationController(CourseRegistrationService service) {
+    public EnrollmentController(EnrollmentService service) {
         this.service = service;
     }
 
     @PostMapping("/register")
-    public ResponseEntity<ApiResponse<CourseRegisterResponse>> register
-            (@Valid @RequestBody CourseRegisterRequest request){
-        CourseRegistration courseRegistration = service.create(CourseRegistration.fromDto(request));
+    public ResponseEntity<ApiResponse<EnrollmentResponse>> register
+            (@Valid @RequestBody EnrollmentRequest request){
+        Enrollment enrollment = service.create(Enrollment.fromDto(request));
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(new ApiResponse<>(CourseRegisterResponse.fromEntity(courseRegistration)));
+                .body(new ApiResponse<>(EnrollmentResponse.fromEntity(enrollment)));
     }
 
     @DeleteMapping("/unregister")
     public ResponseEntity<ApiResponse<String>> cancelRegistration(
-            @RequestBody CourseUnregisterRequest request){
+            @RequestBody UnenrollmentRequest request){
         service.delete(request.getStudentId(), request.getCourseId());
         ApiResponse<String> response = new ApiResponse<>(
                 true,

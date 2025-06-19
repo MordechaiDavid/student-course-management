@@ -14,7 +14,7 @@ public interface StudentCourseQueryRepository extends JpaRepository<Student, Lon
         s.id, s.name, s.email, c.id, c.name, c.description
     )
     FROM Student s
-    LEFT JOIN CourseRegistration cr ON cr.studentId = s.id
+    LEFT JOIN Enrollment cr ON cr.studentId = s.id
     LEFT JOIN Course c ON cr.courseId = c.id
 """)
     List<StudentCourseFlatDTO> findAllStudentsWithCourses();

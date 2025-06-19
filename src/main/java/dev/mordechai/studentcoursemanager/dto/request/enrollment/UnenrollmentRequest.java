@@ -1,12 +1,11 @@
-package dev.mordechai.studentcoursemanager.dto.request;
+package dev.mordechai.studentcoursemanager.dto.request.enrollment;
 
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.Data;
 
 @Data
-public class CourseRegisterRequest {
+public class UnenrollmentRequest {
     @Positive(message = "Student ID must be positive")
     @NotNull(message = "Student ID is required")
     private Long studentId;

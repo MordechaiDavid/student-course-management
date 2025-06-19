@@ -1,8 +1,8 @@
 package dev.mordechai.studentcoursemanager.service;
 
 
-import dev.mordechai.studentcoursemanager.dto.course.CourseWithStudentsDTO;
-import dev.mordechai.studentcoursemanager.dto.student.StudentWithCoursesDTO;
+import dev.mordechai.studentcoursemanager.dto.entity.course.CourseWithStudentsDTO;
+import dev.mordechai.studentcoursemanager.dto.entity.student.StudentWithCoursesDTO;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package dev.mordechai.studentcoursemanager.dto.student;
+package dev.mordechai.studentcoursemanager.dto.entity.student;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

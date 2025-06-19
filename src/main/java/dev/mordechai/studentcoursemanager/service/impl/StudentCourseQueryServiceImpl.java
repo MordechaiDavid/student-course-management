@@ -1,11 +1,11 @@
 package dev.mordechai.studentcoursemanager.service.impl;
 
 
-import dev.mordechai.studentcoursemanager.dto.course.CourseDTO;
-import dev.mordechai.studentcoursemanager.dto.course.CourseWithStudentsDTO;
+import dev.mordechai.studentcoursemanager.dto.entity.course.CourseDTO;
+import dev.mordechai.studentcoursemanager.dto.entity.course.CourseWithStudentsDTO;
 import dev.mordechai.studentcoursemanager.dto.flat.StudentCourseFlatDTO;
-import dev.mordechai.studentcoursemanager.dto.student.StudentDTO;
-import dev.mordechai.studentcoursemanager.dto.student.StudentWithCoursesDTO;
+import dev.mordechai.studentcoursemanager.dto.entity.student.StudentDTO;
+import dev.mordechai.studentcoursemanager.dto.entity.student.StudentWithCoursesDTO;
 import dev.mordechai.studentcoursemanager.repository.StudentCourseQueryRepository;
 import dev.mordechai.studentcoursemanager.service.StudentCourseQueryService;
 import org.springframework.beans.factory.annotation.Autowired;

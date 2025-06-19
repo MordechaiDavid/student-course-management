@@ -1,4 +1,4 @@
-package dev.mordechai.studentcoursemanager.dto.request;
+package dev.mordechai.studentcoursemanager.dto.request.student;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;

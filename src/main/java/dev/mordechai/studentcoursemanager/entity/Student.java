@@ -1,7 +1,7 @@
 package dev.mordechai.studentcoursemanager.entity;
 
 import dev.mordechai.studentcoursemanager.dto.request.course.StudentCreateRequest;
-import dev.mordechai.studentcoursemanager.dto.request.StudentUpdateRequest;
+import dev.mordechai.studentcoursemanager.dto.request.student.StudentUpdateRequest;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

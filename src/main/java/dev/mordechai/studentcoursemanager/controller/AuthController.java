@@ -1,7 +1,7 @@
 package dev.mordechai.studentcoursemanager.controller;
 
 import dev.mordechai.studentcoursemanager.dto.request.admin.AdminLoginRequest;
-import dev.mordechai.studentcoursemanager.dto.request.StudentLoginRequest;
+import dev.mordechai.studentcoursemanager.dto.request.student.StudentLoginRequest;
 import dev.mordechai.studentcoursemanager.dto.response.LoginResponse;
 import dev.mordechai.studentcoursemanager.entity.Session;
 import dev.mordechai.studentcoursemanager.response.ApiResponse;

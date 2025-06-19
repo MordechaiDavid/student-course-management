@@ -1,7 +1,7 @@
 package dev.mordechai.studentcoursemanager.controller;
 
-import dev.mordechai.studentcoursemanager.dto.course.CourseWithStudentsDTO;
-import dev.mordechai.studentcoursemanager.dto.student.StudentWithCoursesDTO;
+import dev.mordechai.studentcoursemanager.dto.entity.course.CourseWithStudentsDTO;
+import dev.mordechai.studentcoursemanager.dto.entity.student.StudentWithCoursesDTO;
 import dev.mordechai.studentcoursemanager.response.ApiResponse;
 import dev.mordechai.studentcoursemanager.service.StudentCourseQueryService;
 import org.springframework.http.ResponseEntity;

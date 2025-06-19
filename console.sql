@@ -27,7 +27,7 @@ CREATE TABLE courses
     created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE course_registrations
+CREATE TABLE enrollments
 (
     id         BIGINT AUTO_INCREMENT PRIMARY KEY,
     student_id BIGINT NOT NULL,
