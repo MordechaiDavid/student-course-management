@@ -1,9 +1,12 @@
 package dev.mordechai.studentcoursemanager.service.impl;
 
 import dev.mordechai.studentcoursemanager.entity.Course;
+import dev.mordechai.studentcoursemanager.exception.entity.EntityAlreadyExistException;
+import dev.mordechai.studentcoursemanager.exception.entity.EntityNotFoundException;
 import dev.mordechai.studentcoursemanager.repository.CourseRepository;
 import dev.mordechai.studentcoursemanager.service.CourseService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,6 +17,7 @@ public class CourseServiceImpl implements CourseService {
 
     private final CourseRepository repository;
 
+    @Autowired
     public CourseServiceImpl(CourseRepository repository) {
         this.repository = repository;
     }
@@ -22,7 +26,7 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public Course create(Course course) {
         if (repository.existsByName(course.getName())) {
-            throw new RuntimeException();
+            throw new EntityAlreadyExistException("Course with this name already exist");
         }
         log.info("Creating course with name {}", course.getName());
         return repository.save(course);
@@ -31,7 +35,7 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public Course getById(Long id) {
         return repository.findById(id)
-                .orElseThrow(RuntimeException::new);
+                .orElseThrow(() -> new EntityNotFoundException("Course with this ID not found"));
     }
 
     @Override
@@ -42,7 +46,7 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public Course update(Long id, Course course) {
         Course existCourse = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException());
+                .orElseThrow(() -> new EntityNotFoundException("Course with this ID not found"));
         existCourse.setDescription(course.getDescription());
         existCourse.setName(course.getName());
         log.info("Updating course id: {}", course.getId());
@@ -52,7 +56,7 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public void delete(Long id) {
         if (!repository.existsById(id)) {
-            throw new RuntimeException();
+            throw new EntityNotFoundException("Course with this ID not found");
         }
         log.info("Deleting course with id: {}", id);
         repository.deleteById(id);

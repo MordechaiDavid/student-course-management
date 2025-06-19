@@ -58,7 +58,7 @@ public class CourseRegistrationServiceImpl implements CourseRegistrationService 
     @Override
     public void delete(Long studentId, Long courseId) {
         Optional<CourseRegistration> optional = repository.findByStudentIdAndCourseId(studentId, courseId);
-        if (optional.isEmpty()) throw new RuntimeException("not exists");
+        if (optional.isEmpty()) throw new EntityAlreadyExistException("Student with this ID already register for This course ID");
         log.info("delete registration with student id {} from course {}",  studentId, courseId);
         repository.delete(optional.get());
 

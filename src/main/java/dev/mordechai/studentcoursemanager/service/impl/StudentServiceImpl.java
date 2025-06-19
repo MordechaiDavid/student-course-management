@@ -68,7 +68,7 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public void delete(Long id) {
         if (!repository.existsById(id)) {
-            throw new RuntimeException();
+            throw new EntityNotFoundException("Student with this id not found");
         }
         log.info("Deleting student with id: {}", id);
         repository.deleteById(id);

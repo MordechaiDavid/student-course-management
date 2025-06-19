@@ -6,7 +6,6 @@ import dev.mordechai.studentcoursemanager.dto.response.CourseRegisterResponse;
 import dev.mordechai.studentcoursemanager.entity.CourseRegistration;
 import dev.mordechai.studentcoursemanager.response.ApiResponse;
 import dev.mordechai.studentcoursemanager.service.CourseRegistrationService;
-import dev.mordechai.studentcoursemanager.service.SessionService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -33,8 +32,15 @@ public class CourseRegistrationController {
     }
 
     @DeleteMapping("/unregister")
-    public String cancelRegistration(@RequestBody CourseUnregisterRequest request){
-        return "unregister successfully";
+    public ResponseEntity<ApiResponse<String>> cancelRegistration(
+            @RequestBody CourseUnregisterRequest request){
+        service.delete(request.getStudentId(), request.getCourseId());
+        ApiResponse<String> response = new ApiResponse<>(
+                true,
+                "Unregister successfully",
+                null
+        );
+        return ResponseEntity.ok(response);
     }
 
 

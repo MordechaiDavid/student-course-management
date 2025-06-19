@@ -37,14 +37,13 @@ public class StudentController {
                         .body(new ApiResponse<>(StudentResponse.fromEntity(student)));
     }
 
-    //FIXME do this:
-//    @GetMapping
-//    public ResponseEntity<ApiResponse<List<StudentResponse>>> getAll(){
-//        return ResponseEntity.ok()
-//                .body(new ApiResponse<>(studentService.getAll()))
-//    }
-
-
+    @GetMapping
+    public ResponseEntity<ApiResponse<List<StudentResponse>>> getAll(){
+        return ResponseEntity.ok()
+                .body(new ApiResponse<>(studentService.getAll().stream()
+                        .map(StudentResponse::fromEntity)
+                        .toList()));
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<StudentResponse>> getById(
@@ -62,7 +61,7 @@ public class StudentController {
 
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse<StudentResponse>> update(
-            @PathVariable("id") Long id, @Valid @RequestBody StudentUpdateRequest request) {
+            @PathVariable("id") @Positive Long id, @Valid @RequestBody StudentUpdateRequest request) {
         Student updatedStudent = studentService.update(id, Student.fromDto(request));
         return ResponseEntity.ok()
                         .body(new ApiResponse<>(StudentResponse.fromEntity(updatedStudent)));
