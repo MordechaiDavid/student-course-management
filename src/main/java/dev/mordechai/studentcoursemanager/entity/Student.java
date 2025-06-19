@@ -25,8 +25,8 @@ public class Student {
     @Column(nullable = false, unique = true, length = 100)
     private String email;
 
-    @Column(name = "special_key", nullable = false, unique = true, length = 255)
-    private String specialKey;
+    @Column(name = "secret_key", nullable = false, unique = true, length = 255)
+    private String secretKey;
 
     public static Student fromDto(StudentCreateRequest dto){
         return Student.builder()

@@ -21,7 +21,7 @@ public class StudentResponse {
                 id(entity.getId()).
                 name(entity.getName()).
                 email(entity.getEmail()).
-                secretKey(entity.getSpecialKey()).
+                secretKey(entity.getSecretKey()).
                 build();
     }
 

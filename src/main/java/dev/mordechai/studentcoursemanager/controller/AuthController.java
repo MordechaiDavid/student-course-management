@@ -41,8 +41,5 @@ public class AuthController {
                 .body(new ApiResponse<>(LoginResponse.fromEntity(session)));
     }
 
-//    @PostMapping("/logout")
-//    public ResponseEntity<Void> logout() {
-//        return ResponseEntity.ok().build();
-//    }
+
 }

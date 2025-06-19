@@ -33,7 +33,7 @@ public class StudentServiceImpl implements StudentService {
             throw new EntityAlreadyExistException("Student with this email already exist");
         }
         String specialKey = generateSpecialKey();
-        student.setSpecialKey(specialKey);
+        student.setSecretKey(specialKey);
         //TODO encrypt the special key to db
         log.info("Creating student with email: {}", student.getEmail());
         return repository.save(student);
@@ -86,6 +86,6 @@ public class StudentServiceImpl implements StudentService {
     }
 
     public Optional<Student> getBySpecialKey(String specialKey) {
-        return repository.findBySpecialKey(specialKey);
+        return repository.findBySecretKey(specialKey);
     }
 } 
