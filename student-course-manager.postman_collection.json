@@ -109,7 +109,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"firstName\": \"John\",\n    \"lastName\": \"Doe\",\n    \"email\": \"john.doe@example.com\"\n}",
+							"raw": "{\n    \"name\": \"John Doe\",\n    \"email\": \"john.doe@example.com\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -117,12 +117,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrl}}/api/students",
+							"raw": "{{baseUrl}}/api/admin/students",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"api",
+								"admin",
 								"students"
 							]
 						}
@@ -130,7 +131,7 @@
 					"response": []
 				},
 				{
-					"name": "Get Student",
+					"name": "Get All Students",
 					"request": {
 						"method": "GET",
 						"header": [
@@ -141,14 +142,67 @@
 							}
 						],
 						"url": {
-							"raw": "{{baseUrl}}/api/students/1",
+							"raw": "{{baseUrl}}/api/admin/students",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"api",
+								"admin",
+								"students"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Student by ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Session-Key",
+								"value": "{{sessionKey}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/admin/students/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"admin",
 								"students",
 								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Student by Email",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Session-Key",
+								"value": "{{sessionKey}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/admin/students/email/john.doe@example.com",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"admin",
+								"students",
+								"email",
+								"john.doe@example.com"
 							]
 						}
 					},
@@ -167,7 +221,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"firstName\": \"John\",\n    \"lastName\": \"Doe\",\n    \"email\": \"john.doe.updated@example.com\"\n}",
+							"raw": "{\n    \"name\": \"John Doe Updated\",\n    \"email\": \"john.doe.updated@example.com\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -175,12 +229,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrl}}/api/students/1",
+							"raw": "{{baseUrl}}/api/admin/students/1",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"api",
+								"admin",
 								"students",
 								"1"
 							]
@@ -200,12 +255,13 @@
 							}
 						],
 						"url": {
-							"raw": "{{baseUrl}}/api/students/1",
+							"raw": "{{baseUrl}}/api/admin/students/1",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"api",
+								"admin",
 								"students",
 								"1"
 							]
@@ -231,7 +287,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"Introduction to Programming\",\n    \"description\": \"A beginner's course on programming fundamentals.\"\n}",
+							"raw": "{\n    \"name\": \"Math 101\",\n    \"description\": \"Basic mathematics course\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -239,12 +295,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrl}}/api/courses",
+							"raw": "{{baseUrl}}/api/admin/courses",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"api",
+								"admin",
 								"courses"
 							]
 						}
@@ -252,7 +309,7 @@
 					"response": []
 				},
 				{
-					"name": "Get Course",
+					"name": "Get All Courses",
 					"request": {
 						"method": "GET",
 						"header": [
@@ -263,12 +320,38 @@
 							}
 						],
 						"url": {
-							"raw": "{{baseUrl}}/api/courses/1",
+							"raw": "{{baseUrl}}/api/admin/courses",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"api",
+								"admin",
+								"courses"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Course by ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Session-Key",
+								"value": "{{sessionKey}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/admin/courses/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"admin",
 								"courses",
 								"1"
 							]
@@ -289,7 +372,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"id\": 1,\n    \"name\": \"Introduction to Java Programming\",\n    \"description\": \"An updated beginner's course on programming fundamentals with Java.\"\n}",
+							"raw": "{\n    \"name\": \"Math 101 Updated\",\n    \"description\": \"Updated description\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -297,13 +380,15 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrl}}/api/courses",
+							"raw": "{{baseUrl}}/api/admin/courses/1",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"api",
-								"courses"
+								"admin",
+								"courses",
+								"1"
 							]
 						}
 					},
@@ -321,12 +406,13 @@
 							}
 						],
 						"url": {
-							"raw": "{{baseUrl}}/api/courses/1",
+							"raw": "{{baseUrl}}/api/admin/courses/1",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"api",
+								"admin",
 								"courses",
 								"1"
 							]
@@ -337,7 +423,7 @@
 			]
 		},
 		{
-			"name": "Course Registration",
+			"name": "Course Registration (Student)",
 			"item": [
 				{
 					"name": "Register for Course",
@@ -352,7 +438,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"courseId\": 1\n}",
+							"raw": "{\n    \"studentId\": 1,\n    \"courseId\": 1\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -360,14 +446,15 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrl}}/api/courses/registration",
+							"raw": "{{baseUrl}}/api/student/courses/register",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"api",
+								"student",
 								"courses",
-								"registration"
+								"register"
 							]
 						}
 					},
@@ -384,16 +471,25 @@
 								"type": "text"
 							}
 						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"studentId\": 1,\n    \"courseId\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
-							"raw": "{{baseUrl}}/api/courses/registration/1",
+							"raw": "{{baseUrl}}/api/student/courses/unregister",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"api",
+								"student",
 								"courses",
-								"registration",
-								"1"
+								"unregister"
 							]
 						}
 					},
