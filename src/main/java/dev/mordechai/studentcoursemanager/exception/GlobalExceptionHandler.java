@@ -1,6 +1,8 @@
 package dev.mordechai.studentcoursemanager.exception;
 
 import dev.mordechai.studentcoursemanager.exception.auth.InvalidCredentialsException;
+import dev.mordechai.studentcoursemanager.exception.business.CourseCapacityExceededException;
+import dev.mordechai.studentcoursemanager.exception.business.StudentCourseLimitExceededException;
 import dev.mordechai.studentcoursemanager.exception.entity.EntityAlreadyExistException;
 import dev.mordechai.studentcoursemanager.exception.entity.EntityNotFoundException;
 import dev.mordechai.studentcoursemanager.response.ApiResponse;
@@ -77,7 +79,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiResponse<ErrorResponse>> handleInvalidCredentialException(
             HttpServletRequest request, InvalidCredentialsException ex){
         ErrorResponse response = buildResponse(request, ex);
-        log.error("invalid credential "+ response.getMessages());
+        log.error("Login failed - invalid credential "+ response.getMessages());
         return ResponseEntity.badRequest().body(new ApiResponse<>(response));
     }
 
@@ -110,11 +112,29 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse<>(response));
     }
 
+    @ExceptionHandler(CourseCapacityExceededException.class)
+    public ResponseEntity<ApiResponse<ErrorResponse>> handleCourseCapacityExceededException(
+            HttpServletRequest request, CourseCapacityExceededException ex){
+        ErrorResponse response = buildResponse(request, ex);
+        log.error("Can not register to course: "+response.getMessages());
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(new ApiResponse<>(response));
+    }
+
+    @ExceptionHandler(StudentCourseLimitExceededException.class)
+    public ResponseEntity<ApiResponse<ErrorResponse>> handleStudentCourseLimitExceededException(
+            HttpServletRequest request, StudentCourseLimitExceededException ex){
+        ErrorResponse response = buildResponse(request, ex);
+        log.error("Can not register to course: "+response.getMessages());
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(new ApiResponse<>(response));
+    }
 
 
 
 
-    private ErrorResponse buildResponse(HttpServletRequest request, FatherAppException ex){
+
+
+
+    private ErrorResponse buildResponse(HttpServletRequest request, BaseAppException ex){
         return ErrorResponse.builder()
                 .httpStatusCode(ex.getHttpStatusCode())
                 .messages(ex.getMessages())
@@ -133,19 +153,19 @@ public class GlobalExceptionHandler {
              * @param request the HTTP request
              * @return a standardized error response for unexpected errors
              */
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiResponse<ErrorResponse>> handleGeneralException(
-            HttpServletRequest request, Exception ex) {
-
-        ErrorResponse response = ErrorResponse.builder()
-                .httpStatusCode(HttpStatus.INTERNAL_SERVER_ERROR)
-                .messages(List.of("Some Error in server"))
-                .timestamp(LocalDateTime.now())
-                .path(request.getRequestURI())
-                .build();
-        log.error(""+response.getMessages());
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse<>(response));
-    }
+//    @ExceptionHandler(Exception.class)
+//    public ResponseEntity<ApiResponse<ErrorResponse>> handleGeneralException(
+//            HttpServletRequest request, Exception ex) {
+//
+//        ErrorResponse response = ErrorResponse.builder()
+//                .httpStatusCode(HttpStatus.INTERNAL_SERVER_ERROR)
+//                .messages(List.of("Some Error in server"))
+//                .timestamp(LocalDateTime.now())
+//                .path(request.getRequestURI())
+//                .build();
+//        log.error(""+response.getMessages());
+//        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse<>(response));
+//    }
 
 
 }

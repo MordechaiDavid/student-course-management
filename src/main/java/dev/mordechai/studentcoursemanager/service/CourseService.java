@@ -16,4 +16,6 @@ public interface CourseService {
     Course update(Long id, Course course);
 
     void delete(Long id);
+
+    boolean existById(Long id);
 }

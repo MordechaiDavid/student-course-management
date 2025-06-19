@@ -24,7 +24,8 @@ public class AuthController {
     }
 
     @PostMapping("/admin/login")
-    public ResponseEntity<ApiResponse<LoginResponse>> adminLogin(@Valid @RequestBody AdminLoginRequest request) {
+    public ResponseEntity<ApiResponse<LoginResponse>> adminLogin(
+            @Valid @RequestBody AdminLoginRequest request) {
         Session session = authService.
                 authenticateAdminAndGenerateSessionKey(request.getEmail(), request.getPassword());
         return ResponseEntity.status(HttpStatus.OK)
@@ -32,7 +33,8 @@ public class AuthController {
     }
 
     @PostMapping("/student/login")
-    public ResponseEntity<ApiResponse<LoginResponse>> studentLogin(@Valid @RequestBody StudentLoginRequest request) {
+    public ResponseEntity<ApiResponse<LoginResponse>> studentLogin(
+            @Valid @RequestBody StudentLoginRequest request) {
         Session session = authService.authenticateStudentAndGenerateSessionKey(request.getSpecialKey());
 
         return ResponseEntity.status(HttpStatus.OK)

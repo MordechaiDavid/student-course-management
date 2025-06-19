@@ -1,7 +1,7 @@
 package dev.mordechai.studentcoursemanager.exception.session;
 
-import dev.mordechai.studentcoursemanager.exception.FatherAppException;
+import dev.mordechai.studentcoursemanager.exception.BaseAppException;
 
 
-public class InvalidSessionKeyException extends FatherAppException {
+public class InvalidSessionKeyException extends BaseAppException {
 }

@@ -35,9 +35,9 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public Session authenticateAdminAndGenerateSessionKey(String email, String password) {
         Admin admin = adminService.getByEmail(email)
-                .orElseThrow(()-> new InvalidCredentialsException());
+                .orElseThrow(()-> new InvalidCredentialsException("invalid email or password"));
         if (!passwordEncoder.matches(password, admin.getHashPassword())) {
-            throw new InvalidCredentialsException();
+            throw new InvalidCredentialsException("invalid email or password");
         }
         log.info("Login Admin with email {}", admin.getEmail());
         return sessionService.createSession(admin.getId(), UserType.ADMIN);
@@ -46,7 +46,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public Session authenticateStudentAndGenerateSessionKey(String specialKey) {
         Student student = studentService.getBySpecialKey(specialKey)
-                .orElseThrow(RuntimeException::new);
+                .orElseThrow(()-> new InvalidCredentialsException("invalid secret-key"));
         log.info("Login Student with email {}", student.getEmail());
         return sessionService.createSession(student.getId(), UserType.STUDENT);
     }

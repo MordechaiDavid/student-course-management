@@ -10,7 +10,7 @@ import java.util.List;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class FatherAppException extends RuntimeException{
+public class BaseAppException extends RuntimeException{
     private HttpStatusCode httpStatusCode;
     private List<String> messages;
 }

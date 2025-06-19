@@ -15,8 +15,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
-@RequestMapping("/api/students")
+@RequestMapping("/api/admin/students")
 @Validated
 public class StudentController {
 
@@ -34,6 +36,15 @@ public class StudentController {
         return ResponseEntity.status(HttpStatus.CREATED)
                         .body(new ApiResponse<>(StudentResponse.fromEntity(student)));
     }
+
+    //FIXME do this:
+//    @GetMapping
+//    public ResponseEntity<ApiResponse<List<StudentResponse>>> getAll(){
+//        return ResponseEntity.ok()
+//                .body(new ApiResponse<>(studentService.getAll()))
+//    }
+
+
 
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<StudentResponse>> getById(

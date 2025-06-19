@@ -1,10 +1,7 @@
 package dev.mordechai.studentcoursemanager.exception.session;
 
-import dev.mordechai.studentcoursemanager.exception.FatherAppException;
-import org.springframework.http.HttpStatus;
+import dev.mordechai.studentcoursemanager.exception.BaseAppException;
 
-import java.util.List;
-
-public class UnappropriatedSessionKeyException extends FatherAppException {
+public class UnappropriatedSessionKeyException extends BaseAppException {
 
 }

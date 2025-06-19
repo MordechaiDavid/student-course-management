@@ -25,14 +25,9 @@ public class SessionKeyAuthFilter extends OncePerRequestFilter {
 
     private final SessionService sessionService;
 
-    private final List<String> adminEndpoints = Arrays.asList(
-            "/api/students",
-            "/api/courses",
-            "/api/admin/dashboard"
-    );
-    private final List<String> studentEndpoints = Arrays.asList(
-            "/api/courses/registration"
-    );
+    private final String adminEndpoints = "/api/admin";
+    private final String studentEndpoints = "/api/student";
+
 
     @Autowired
     public SessionKeyAuthFilter(SessionService sessionService) {
@@ -40,15 +35,20 @@ public class SessionKeyAuthFilter extends OncePerRequestFilter {
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request,
-                                    HttpServletResponse response, FilterChain filterChain)
+    protected void doFilterInternal(
+            HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
 
         String sessionKey = request.getHeader("Session-Key");
         String requestURI = request.getRequestURI();
+        String method = request.getMethod();
+
+        log.debug("Processing request: {} {} with session key: {}", method, requestURI,
+                sessionKey != null ? "present" : "missing");
 
 
         if (requestURI.startsWith("/api/auth/")) {
+            log.debug("Skipping authentication for auth endpoint: {}", requestURI);
             filterChain.doFilter(request, response);
             return;
         }
@@ -56,70 +56,63 @@ public class SessionKeyAuthFilter extends OncePerRequestFilter {
             if (sessionKey == null || sessionKey.isEmpty()) {
                 throw new EmptySessionException();
             }
+
             sessionService.validateSession(sessionKey);
+            log.debug("Session key validated successfully");
 
             if (isStudentEndpoint(requestURI)) {
+                log.debug("Validating student session for endpoint: {}", requestURI);
                 sessionService.validateStudentSession(sessionKey);
-                filterChain.doFilter(request, response);
-                return;
+                log.debug("Student session validated successfully");
             }
 
             if (isAdminEndpoint(requestURI)) {
+                log.debug("Validating admin session for endpoint: {}", requestURI);
                 sessionService.validateAdminSession(sessionKey);
-                filterChain.doFilter(request, response);
-                return;
+                log.debug("Admin session validated successfully");
             }
 
             filterChain.doFilter(request, response);
+
+
         }catch (EmptySessionException ex) {
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
-            String message = "request missing session key";
-            response.getWriter().write(message);
-            log.error("login error: "+message);
-
-
-        }catch (InvalidSessionKeyException ex){
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
-            String message = "invalid session-key";
-            response.getWriter().write(message);
-            log.error("login error: "+message);
-
-
-        }catch (SessionKeyExpiredException ex){
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
-            String message = "session key expired";
-            response.getWriter().write(message);
-            log.error("login error: "+message);
-        }catch (UnappropriatedSessionKeyException ex){
-            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
-            String message = "feature to do by user with this session-key are unauthorized";
-            response.getWriter().write(message);
-            log.error("login error: "+message);
-        }catch (Exception ex){
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
-            String message = "server error";
-            response.getWriter().write(message);
-            log.error("login error: "+message);
+            handleAuthError(response, HttpServletResponse.SC_UNAUTHORIZED,
+                    "Request missing session key", ex);
+        } catch (InvalidSessionKeyException ex) {
+            handleAuthError(response, HttpServletResponse.SC_UNAUTHORIZED,
+                    "Invalid session key", ex);
+        } catch (SessionKeyExpiredException ex) {
+            handleAuthError(response, HttpServletResponse.SC_UNAUTHORIZED,
+                    "Session key expired", ex);
+        } catch (UnappropriatedSessionKeyException ex) {
+            handleAuthError(response, HttpServletResponse.SC_FORBIDDEN,
+                    "Insufficient permissions for this operation", ex);
+        } catch (Exception ex) {
+            handleAuthError(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
+                    "Internal server error", ex);
         }
 
+    }
 
+    private void handleAuthError(HttpServletResponse response, int statusCode,
+                                 String message, Exception ex) throws IOException {
+        response.setStatus(statusCode);
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+
+        // Create a proper JSON response
+        String jsonResponse = String.format("{\"error\": \"%s\", \"timestamp\": \"%s\"}",
+                message, java.time.Instant.now().toString());
+        response.getWriter().write(jsonResponse);
+
+        log.error("Authentication/Authorization error: {} - {}", message, ex.getMessage(), ex);
     }
 
     private boolean isAdminEndpoint(String requestURI) {
-        return adminEndpoints.stream().anyMatch(endpoint -> requestURI.startsWith(endpoint));
+        return requestURI.startsWith(adminEndpoints);
     }
 
     private boolean isStudentEndpoint(String requestURI) {
-        return studentEndpoints.stream().anyMatch(endpoint -> requestURI.startsWith(endpoint));
+        return requestURI.startsWith(studentEndpoints);
     }
 } 

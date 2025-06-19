@@ -58,7 +58,9 @@ public class CourseServiceImpl implements CourseService {
         repository.deleteById(id);
     }
 
-    private boolean existByName(String name) {
-        return repository.existsByName(name);
+    @Override
+    public boolean existById(Long id) {
+        return repository.existsById(id);
     }
+
 }
