@@ -48,6 +48,8 @@ public class CourseServiceImpl implements CourseService {
         Course existCourse = repository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Course with this ID not found"));
         existCourse.setDescription(course.getDescription());
+        if (repository.existsByName(course.getName()))
+            throw new EntityAlreadyExistException("Cannot update: Course with this name already exist");
         existCourse.setName(course.getName());
         log.info("Updating course id: {}", course.getId());
         return repository.save(existCourse);

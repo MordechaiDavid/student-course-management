@@ -60,6 +60,8 @@ public class StudentServiceImpl implements StudentService {
     public Student update(Long id, Student student) {
         Student existStudent = repository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Student with this id not found"));
+        if (repository.existsByEmail(student.getEmail()))
+            throw new EntityAlreadyExistException("Cannot update: Student with this email already exist");
         existStudent.setEmail(student.getEmail());
         log.info("Updating email for student with id: {}", existStudent.getId());
         return repository.save(existStudent);
